@@ -1,30 +1,30 @@
-import { Button } from "antd";
+import { Button, Row } from "antd";
 import { FieldValues, useForm } from "react-hook-form";
-import { useLoginMutation } from "../redux/features/auth/authApi";
 import { useAppDispatch } from "../redux/hooks";
 import { verifyToken } from "../utils/verifyToken";
-import { TUser, setUser } from "../redux/features/auth/authSlice";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../redux/features/auth/authApi";
+import { TUser, setUser } from "../redux/features/auth/authSlice";
+import PHForm from "../components/form/PHForm";
+import PHInput from "../components/form/PHInput";
 
 const Login = () => {
-  const { register, handleSubmit } = useForm({
-    defaultValues: {
+   const defaultValues= {
       userId: "A-0001",
       password: "admin123",
-    },
-  });
+    }
   const navigate = useNavigate();
   const [login] = useLoginMutation();
   const dispatch = useAppDispatch();
 
   const onSubmit = async (data: FieldValues) => {
     const toastId = toast.loading("Logging in...");
-    const userInfo = {
-      id: data.userId,
-      password: data.password,
-    };
     try {
+      const userInfo = {
+        id: data.userId,
+        password: data.password,
+      };
       const res = await login(userInfo).unwrap(); // unwrap() to exclude the parent layer and the data
 
       // now pass the res data to verifyToken
@@ -40,19 +40,13 @@ const Login = () => {
     }
   };
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label htmlFor="">ID: </label>
-          <input type="text" id="id" {...register("userId")} />
-        </div>
-        <div>
-          <label htmlFor="">Password: </label>
-          <input type="text" id="password" {...register("password")} />
-        </div>
+    <Row justify="center" align="middle" style={{ height: "100vh" }}>
+      <PHForm onSubmit={onSubmit} defaultValues={defaultValues}>
+        <PHInput type="text" name="userId" label="ID: " />
+        <PHInput type="text" name="password" label="Password: " />
         <Button htmlType="submit">Login</Button>
-      </form>
-    </div>
+      </PHForm>
+    </Row>
   );
 };
 
