@@ -14,6 +14,7 @@ const Login = () => {
       userId: "A-0001",
       password: "admin123",
     }
+
   const navigate = useNavigate();
   const [login] = useLoginMutation();
   const dispatch = useAppDispatch();
@@ -25,6 +26,7 @@ const Login = () => {
         id: data.userId,
         password: data.password,
       };
+
       const res = await login(userInfo).unwrap(); // unwrap() to exclude the parent layer and the data
 
       // now pass the res data to verifyToken
@@ -33,12 +35,18 @@ const Login = () => {
 
       // set user data to redux state
       dispatch(setUser({ user: user, token: res.data.accessToken }));
+      
       toast.success("Logged in successfully!", { id: toastId, duration: 2000 });
+      
       navigate(`/${user.role}/dashboard`);
+
     } catch (error) {
+
       toast.error("Something went wrong!", { id: toastId, duration: 2000 });
+    
     }
   };
+  
   return (
     <Row justify="center" align="middle" style={{ height: "100vh" }}>
       <PHForm onSubmit={onSubmit} defaultValues={defaultValues}>

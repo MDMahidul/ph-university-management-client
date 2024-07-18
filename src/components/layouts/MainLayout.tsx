@@ -7,12 +7,15 @@ import { logout } from "../../redux/features/auth/authSlice";
 const { Header, Content } = Layout;
 
 const MainLayout = () => {
+
   const dispatch = useAppDispatch();
+
   const handleLogout = () => {
     dispatch(logout());
   };
+
   return (
-    <Layout style={{ height: "100vh" }}>
+    <Layout style={{ height: "100%" }}>
       <Sidebar />
       <Layout>
         <Header>
