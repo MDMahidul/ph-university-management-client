@@ -85,17 +85,29 @@ const CreateAcademicSemester = () => {
               academicManagementSchema.academicSemesterSchema
             )}
           >
-            <PHSelect label="Name" name="name" options={nameOptions} />
-            <PHSelect label="Year" name="year" options={yearOptions} />
+            <PHSelect
+              label="Name"
+              name="name"
+              options={nameOptions}
+              placeholder="semester name"
+            />
+            <PHSelect
+              label="Year"
+              name="year"
+              options={yearOptions}
+              placeholder="year"
+            />
             <PHSelect
               label="Start Month"
               name="startMonth"
               options={monthOptions}
+              placeholder="start month"
             />
             <PHSelect
               label="End Month"
               name="endMonth"
               options={monthOptions}
+              placeholder="end month"
             />
             <Button htmlType="submit">Submit</Button>
           </PHForm>

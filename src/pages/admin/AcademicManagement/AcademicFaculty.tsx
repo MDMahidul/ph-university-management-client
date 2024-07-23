@@ -2,13 +2,13 @@ import { Button, Table, TableColumnsType } from "antd";
 import { TAcademicFaculty } from "../../../types/academicManagement.type";
 import { useGetAllFacultiesQuery } from "../../../redux/features/admin/academicManagement.api";
 
-type TFacultyTableData = Pick<TAcademicFaculty, "_id" | "name">;
+type TFacultyTableData = Pick<TAcademicFaculty, "name">;
 
 const AcademicFaculty = () => {
   const { data: facultyData, isFetching } = useGetAllFacultiesQuery(undefined);
 
   const tableData = facultyData?.data?.map(({ _id, name }) => ({
-    _id,
+    key: _id,
     name,
   }));
 
