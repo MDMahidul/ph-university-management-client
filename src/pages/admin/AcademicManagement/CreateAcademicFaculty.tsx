@@ -13,7 +13,9 @@ const CreateAcademicFaculty = () => {
   const [addAcademicFaculty] = useAddAcademicFacultyMutation();
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const toastId = toast.loading("Creating...");
+    const toastId = toast.loading("Creating...", {
+      style: { padding: "10px" },
+    });
 
     const facultyName = {
       name: data.name,
@@ -27,7 +29,7 @@ const CreateAcademicFaculty = () => {
       if (res?.error) {
         toast.error(res.error?.data?.message, {
           duration: 2000,
-          id: toastId,
+          id: toastId,style:{padding:'10px'}
         });
         return;
       } else {
@@ -38,7 +40,11 @@ const CreateAcademicFaculty = () => {
       }
     } catch (error: any) {
       console.log(error);
-      toast.error(error?.message, { duration: 2000, id: toastId });
+      toast.error(error?.message, {
+        duration: 2000,
+        id: toastId,
+        style: { padding: "10px" },
+      });
     }
   };
 

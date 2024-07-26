@@ -20,7 +20,9 @@ const Login = () => {
   const dispatch = useAppDispatch();
 
   const onSubmit = async (data: FieldValues) => {
-    const toastId = toast.loading("Logging in...");
+    const toastId = toast.loading("Logging in...", {
+      style: { padding: "10px" },
+    });
     try {
       const userInfo = {
         id: data.userId,
@@ -36,13 +38,17 @@ const Login = () => {
       // set user data to redux state
       dispatch(setUser({ user: user, token: res.data.accessToken }));
       
-      toast.success("Logged in successfully!", { id: toastId, duration: 2000 });
+      toast.success("Logged in successfully!", {
+        id: toastId,
+        duration: 2000,
+        style: { padding: "10px" },
+      });
       
       navigate(`/${user.role}/dashboard`);
 
     } catch (error) {
 
-      toast.error("Something went wrong!", { id: toastId, duration: 2000 });
+      toast.error("Something went wrong!", { id: toastId, duration: 2000,style:{padding:'10px'} });
     
     }
   };

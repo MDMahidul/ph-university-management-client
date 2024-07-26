@@ -12,6 +12,7 @@ type TTableData = Pick<
 
 const AcademicSemester = () => {
   const [params, setParams] = useState<TQueryParams[] | undefined>(undefined);
+
   const { data: semesterData, isFetching } = useGetAllSemesterQuery(params);
 
   const tableData = semesterData?.data?.map(
@@ -86,7 +87,7 @@ const AcademicSemester = () => {
   return (
     <>
       <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-         Academic Semester
+        Academic Semester
       </h2>
       <Table
         onChange={onChange}

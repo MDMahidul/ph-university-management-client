@@ -24,7 +24,9 @@ const CreateAcademicDepartment = () => {
   }));
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const toastId = toast.loading("Creating...");
+    const toastId = toast.loading("Creating...",{
+      style: { padding: "10px" },
+    });
 
     const departmentData = {
       name: data.name,
@@ -37,7 +39,11 @@ const CreateAcademicDepartment = () => {
       )) as TResponse<TAcademicDepartment>;
 
       if (res?.error) {
-        toast.error(res.error?.data?.message, { duration: 2000, id: toastId });
+        toast.error(res.error?.data?.message, {
+          duration: 2000,
+          id: toastId,
+          style: { padding: "10px" },
+        });
         return;
       } else {
         toast.success("Department added successfully!", {
@@ -47,7 +53,11 @@ const CreateAcademicDepartment = () => {
       }
     } catch (error: any) {
       console.log(error);
-      toast.error(error?.message, { duration: 2000, id: toastId });
+      toast.error(error?.message, {
+        duration: 2000,
+        id: toastId,
+        style: { padding: "10px" },
+      });
     }
   };
   return (
