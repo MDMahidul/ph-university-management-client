@@ -7,7 +7,6 @@ import { logout } from "../../redux/features/auth/authSlice";
 const { Header, Content } = Layout;
 
 const MainLayout = () => {
-
   const dispatch = useAppDispatch();
 
   const handleLogout = () => {
@@ -22,12 +21,7 @@ const MainLayout = () => {
           <Button onClick={handleLogout}>Logout</Button>
         </Header>
         <Content style={{ margin: "10px 16px 20px" }}>
-          <div
-            style={{
-              padding: 24,
-              minHeight: 360,
-            }}
-          >
+          <div className="responsive-content">
             <Outlet />
           </div>
         </Content>

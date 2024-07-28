@@ -1,0 +1,64 @@
+/* ---------- student details ---------- */
+
+/* for label */
+.item-label{
+    text-align: right;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+/* for table cell */
+.custom-table .ant-table-cell {
+  padding: 6px 12px !important;
+}
+
+/* for table column */
+.custom-col {
+  text-align: left !important;
+  margin-bottom: 0px !important;
+}
+
+@media (max-width: 576px) { 
+  .custom-col {
+    text-align: center !important;
+    margin: 15px 0 !important;
+  }
+}
+
+/* for image */
+.responsive-image {
+  width: 280px !important;
+  height: 250px !important;
+}
+
+@media (min-width: 576px) {
+  /* Small devices (landscape phones, 576px and up) */
+  .responsive-image {
+    width: 230px !important;
+    height: 210px !important;
+  }
+}
+
+@media (min-width: 768px) {
+  /* Medium devices (tablets, 768px and up) */
+  .responsive-image {
+    width: 250px !important;
+    height: 210px !important;
+  }
+}
+
+@media (min-width: 992px) {
+  /* Large devices (desktops, 992px and up) */
+  .responsive-image {
+    width: 270px !important;
+    height: 230px !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  /* Extra large devices (large desktops, 1200px and up) */
+  .responsive-image {
+    width: 270px !important;
+    height: 230px !important;
+  }
+}

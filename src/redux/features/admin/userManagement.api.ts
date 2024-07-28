@@ -26,6 +26,19 @@ const userManagementApi = baseApi.injectEndpoints({
         };
       },
     }),
+    getSingleStudent: builder.query({
+      query: (id) => {
+        return {
+          url: `/students/${id}`,
+          method: "GET",
+        };
+      },
+      transformResponse: (response: TResponseRedux<TStudent>) => {
+        return {
+          data: response.data,
+        };
+      },
+    }),
     addStudent: builder.mutation({
       query: (data) => ({
         url: "/users/create-student",
@@ -33,8 +46,27 @@ const userManagementApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
+    updateSingleStudent: builder.mutation({
+      query: ({ data, id }) => ({
+        url: `/students/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+    }),
+    blockStudent: builder.mutation({
+      query: ({ data, id }) => ({
+        url: `/users/change-status/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useAddStudentMutation, useGetAllStudentsQuery } =
-  userManagementApi;
+export const {
+  useAddStudentMutation,
+  useGetAllStudentsQuery,
+  useGetSingleStudentQuery,
+  useBlockStudentMutation,
+  useUpdateSingleStudentMutation,
+} = userManagementApi;

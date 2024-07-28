@@ -1,58 +1,25 @@
-import { Button, Col, Divider, Form, Input, Row } from "antd";
-import PHForm from "../../../components/form/PHForm";
-import PHSelect from "../../../components/form/PHSelect";
-import PHInput from "../../../components/form/PHInput";
-import { bloodGroupsOptions, genderOptions } from "../../../constants/global";
-import PHDatePicker from "../../../components/form/PHDatePicker";
+import { Button, Col, Divider, Flex, Form, Input, Row, Spin } from "antd";
 import { Controller, FieldValues, SubmitHandler } from "react-hook-form";
-import { useAddStudentMutation } from "../../../redux/features/admin/userManagement.api";
+import PHForm from "../../../components/form/PHForm";
+import PHInput from "../../../components/form/PHInput";
+import PHSelect from "../../../components/form/PHSelect";
+import { bloodGroupsOptions, genderOptions } from "../../../constants/global";
 import {
   useGetAllDepartmentQuery,
   useGetAllSemesterQuery,
 } from "../../../redux/features/admin/academicManagement.api";
+import { useParams } from "react-router-dom";
+import {
+  useGetSingleStudentQuery,
+  useUpdateSingleStudentMutation,
+} from "../../../redux/features/admin/userManagement.api";
 import { toast } from "sonner";
 import { TResponse, TStudent } from "../../../types";
+import PHDatePicker from "../../../components/form/PHDatePicker";
 
-//! This is only for development
-//! Should be removed
-const studentDefaultValues = {
-  name: {
-    firstName: "MR.",
-    middleName: "Student",
-    lastName: "No. ",
-  },
-  gender: "male",
-
-  bloodGroup: "A+",
-
-  contactNo: "1235678",
-  emergencyContactNo: "987-654-3210",
-  presentAddress: "123 Main St, Cityville",
-  permanentAddress: "456 Oak St, Townsville",
-
-  guardian: {
-    fatherName: "James Doe",
-    fatherOccupation: "Engineer",
-    fatherContactNo: "111-222-3333",
-    motherName: "Mary Doe",
-    motherOccupation: "Teacher",
-    motherContactNo: "444-555-6666",
-  },
-
-  localGuardian: {
-    name: "Alice Johnson",
-    occupation: "Doctor",
-    contactNo: "777-888-9999",
-    address: "789 Pine St, Villageton",
-  },
-
-  admissionSemester: "65bb60ebf71fdd1add63b1c0",
-  academicDepartment: "65b4acae3dc8d4f3ad83e416",
-};
-
-const CreateStudent = () => {
-  const [addStudent] = useAddStudentMutation();
-
+const StudentUpdate = () => {
+  const [updateSingleStudent] = useUpdateSingleStudentMutation();
+  const { studentId } = useParams<{ studentId: string }>();
   const { data: dData, isLoading: dIsLoading } =
     useGetAllDepartmentQuery(undefined);
 
@@ -69,17 +36,76 @@ const CreateStudent = () => {
     label: item.name,
   }));
 
+  const {
+    data: studentData,
+    isLoading,
+    isError,
+  } = useGetSingleStudentQuery(studentId as string);
+  // Handle loading and error states
+  if (isLoading) {
+    return (
+      <Flex align="center" justify="center" style={{ height: "75vh" }}>
+        <Spin tip="Loading..." />
+      </Flex>
+    );
+  }
+
+  if (isError || !studentData?.data) {
+    return (
+      <Flex align="center" justify="center" style={{ height: "75vh" }}>
+        <h2 style={{ fontWeight: "500", color: "#f0665c" }}>
+          Something went wrong!
+        </h2>
+      </Flex>
+    );
+  }
+  console.log(studentData);
+
+  const studentDefaultValues = {
+    name: {
+      firstName: studentData?.data?.name?.firstName,
+      middleName: studentData?.data?.name?.middleName,
+      lastName: studentData?.data?.name?.lastName,
+    },
+    gender: studentData?.data?.gender,
+    /*  dateOfBirth: studentData?.data?.dateOfBirth, */
+    bloodGroup: studentData?.data?.bloodGroup,
+    email: studentData?.data?.email,
+    image: studentData?.data?.profileImage,
+    contactNo: studentData?.data?.contactNo,
+    emergencyContactNo: studentData?.data?.emergencyContactNo,
+    presentAddress: studentData?.data?.presentAddress,
+    permanentAddress: studentData?.data?.permanentAddress,
+
+    guardian: {
+      fatherName: studentData?.data?.guardian?.fatherName,
+      fatherOccupation: studentData?.data?.guardian?.fatherOccupation,
+      fatherContactNo: studentData?.data?.guardian?.fatherContactNo,
+      motherName: studentData?.data?.guardian?.motherName,
+      motherOccupation: studentData?.data?.guardian?.motherOccupation,
+      motherContactNo: studentData?.data?.guardian?.motherContactNo,
+    },
+
+    localGuardian: {
+      name: studentData?.data?.localGuardian?.name,
+      occupation: studentData?.data?.localGuardian?.occupation,
+      contactNo: studentData?.data?.localGuardian?.contactNo,
+      address: studentData?.data?.localGuardian?.address,
+    },
+
+    admissionSemester: studentData?.data?.admissionSemester?._id,
+    academicDepartment: studentData?.data?.academicDepartment?._id,
+  };
+
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const toastId = toast.loading("Creating...", {
-      style: { padding: "10px" },
-    });
+    const toastId = toast.loading("Updating...");
 
     const studentData = {
-      password: "student123",
       student: data,
     };
 
-    // send data as formdata to server
+    //console.log(studentData);
+
     const formData = new FormData();
     formData.append("data", JSON.stringify(studentData));
     formData.append("file", data.image);
@@ -88,7 +114,10 @@ const CreateStudent = () => {
     //console.log(Object.fromEntries(formData));
 
     try {
-      const res = (await addStudent(formData)) as TResponse<TStudent>;
+      const res = (await updateSingleStudent({
+        data: studentData,
+        id: studentId,
+      })) as TResponse<TStudent>;
 
       if (res?.error) {
         toast.error(res.error?.data?.message, {
@@ -98,9 +127,10 @@ const CreateStudent = () => {
         });
         return;
       } else {
-        toast.success("Student added successfully!", {
+        toast.success("Student data updated successfully!", {
           duration: 2000,
           id: toastId,
+        style: { padding: "10px" }
         });
       }
     } catch (error: any) {
@@ -112,11 +142,10 @@ const CreateStudent = () => {
       });
     }
   };
-
   return (
     <div>
       <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-        Create Student
+        Update Student Data
       </h2>
       <Row>
         <Col span={24}>
@@ -345,4 +374,4 @@ const CreateStudent = () => {
   );
 };
 
-export default CreateStudent;
+export default StudentUpdate;

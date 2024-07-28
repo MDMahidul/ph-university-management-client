@@ -10,12 +10,12 @@ export type TStudent ={
   email: string;
   contactNo: string;
   emergencyContactNo: string;
-  bloogGroup: string;
+  bloodGroup: string;
   presentAddress: string;
   permanentAddress: string;
   guardian: TGuardian;
   localGuardian: TLocalGuardian;
-  profileImg: string;
+  profileImage: string;
   admissionSemester: TAcademicSemester;
   isDeleted: boolean;
   academicDepartment: TAcademicDepartment;

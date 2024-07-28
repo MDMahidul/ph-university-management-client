@@ -3,3 +3,16 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+/* main layout CSS style */
+.responsive-content {
+  padding: 24px;
+  min-height: 360px;
+}
+
+@media (max-width: 768px) { 
+  .responsive-content {
+    padding: 16px 0; 
+    min-height: auto; 
+  }
+}
