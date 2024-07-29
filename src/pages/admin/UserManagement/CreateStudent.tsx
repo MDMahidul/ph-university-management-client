@@ -101,6 +101,7 @@ const CreateStudent = () => {
         toast.success("Student added successfully!", {
           duration: 2000,
           id: toastId,
+          style: { padding: "10px" },
         });
       }
     } catch (error: any) {
@@ -174,6 +175,7 @@ const CreateStudent = () => {
                       <Input
                         type="file"
                         value={value?.fileName}
+                        size="large"
                         {...field}
                         onChange={(e) => onChange(e.target.files?.[0])}
                       />

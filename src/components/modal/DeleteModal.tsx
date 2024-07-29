@@ -1,12 +1,14 @@
-import { useState } from "react";
-import { Button, Modal } from "antd";
+import React, { useState } from "react";
+import { Button, Modal, Tooltip } from "antd";
 
 type TModalPorps = {
   title: string;
   mText: string;
   onConfirm: () => void;
-  status: string;
-  disabled: boolean;
+  status?: string;
+  disabled?: boolean;
+  icon?: React.ReactNode;
+  tooltipText?: string;
 };
 
 const DeleteModal = ({
@@ -15,6 +17,8 @@ const DeleteModal = ({
   onConfirm,
   status,
   disabled,
+  icon,
+  tooltipText,
 }: TModalPorps) => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -25,7 +29,7 @@ const DeleteModal = ({
   };
 
   const handleOk = () => {
-    setModalText("Blocking...");
+    setModalText("Processing...");
     setConfirmLoading(true);
     onConfirm();
     setTimeout(() => {
@@ -41,9 +45,11 @@ const DeleteModal = ({
 
   return (
     <>
-      <Button onClick={showModal} disabled={disabled}>
-        {status}
-      </Button>
+      <Tooltip title={tooltipText}>
+        <Button onClick={showModal} disabled={disabled} icon={icon}>
+          {status}
+        </Button>
+      </Tooltip>
       <Modal
         title={title}
         open={open}

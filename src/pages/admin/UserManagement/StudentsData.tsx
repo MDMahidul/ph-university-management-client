@@ -10,11 +10,13 @@ import { TQueryParams, TResponse, TStudent } from "../../../types";
 import { useState } from "react";
 import {
   useBlockStudentMutation,
+  useDeleteStudentMutation,
   useGetAllStudentsQuery,
 } from "../../../redux/features/admin/userManagement.api";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import DeleteModal from "../../../components/modal/DeleteModal";
+import { DeleteOutlined, FormOutlined, StopOutlined } from "@ant-design/icons";
 
 type TTableData = Pick<
   TStudent,
@@ -26,6 +28,7 @@ const StudentsData = () => {
   const [page, setPage] = useState(1);
 
   const [blockStudent] = useBlockStudentMutation();
+  const [deleteStudent] = useDeleteStudentMutation();
 
   /* function for blocking student */
   const handleBlock = async (id: string) => {
@@ -56,6 +59,31 @@ const StudentsData = () => {
       });
     }
   };
+
+   const handleDelete = async (id: string) => {
+     try {
+       const res = (await deleteStudent(id)) as TResponse<TStudent>;
+
+       if (res?.error) {
+         toast.error(res.error?.data?.message, {
+           duration: 2000,
+           style: { padding: "10px" },
+         });
+         return;
+       } else {
+         toast.success("Student deleted successfully!", {
+           duration: 2000,
+           style: { padding: "10px" },
+         });
+       }
+     } catch (error: any) {
+       console.log(error);
+       toast.error(error?.message, {
+         duration: 2000,
+         style: { padding: "10px" },
+       });
+     }
+   };
 
   const { data: studentsData, isFetching } = useGetAllStudentsQuery([
     { name: "page", value: page },
@@ -108,14 +136,27 @@ const StudentsData = () => {
               <Button>Details</Button>
             </Link>
             <Link to={`/admin/update-student-data/${item.key}`}>
-              <Button>Update</Button>
+              <Button>
+                <FormOutlined />
+              </Button>
             </Link>
             <DeleteModal
+              icon={<StopOutlined />}
               title="Confirm"
               mText="Do you want to block this student?"
               disabled={item?.user?.status === "blocked"}
-              status={item?.user?.status === "blocked" ? "Blocked" : "Block"}
               onConfirm={() => handleBlock(item?.user?._id)}
+              tooltipText={
+                item?.user?.status === "blocked"
+                  ? "This student is blocked"
+                  : ""
+              }
+            />
+            <DeleteModal
+              icon={<DeleteOutlined />}
+              title="Confirm"
+              mText="Do you want to delete this student?"
+              onConfirm={() => handleDelete(item?.key)}
             />
           </Space>
         );

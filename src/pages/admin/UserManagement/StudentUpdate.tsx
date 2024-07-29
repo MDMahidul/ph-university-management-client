@@ -202,7 +202,7 @@ const StudentUpdate = () => {
                     <Form.Item label="Profile Image">
                       <Input
                         type="file"
-                        value={value?.fileName}
+                        value={value?.fileName} size="large"
                         {...field}
                         onChange={(e) => onChange(e.target.files?.[0])}
                       />

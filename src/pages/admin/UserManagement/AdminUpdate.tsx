@@ -1,44 +1,76 @@
-import { Button, Col, Divider, Form, Input, Row } from "antd";
+import { Button, Col, Divider, Flex, Form, Input, Row, Spin } from "antd";
 import PHForm from "../../../components/form/PHForm";
 import PHSelect from "../../../components/form/PHSelect";
 import PHInput from "../../../components/form/PHInput";
-import { bloodGroupsOptions, designationOptions, genderOptions } from "../../../constants/global";
+import {
+  bloodGroupsOptions,
+  designationOptions,
+  genderOptions,
+} from "../../../constants/global";
 import PHDatePicker from "../../../components/form/PHDatePicker";
 import { Controller, FieldValues, SubmitHandler } from "react-hook-form";
-import { useAddAdminMutation } from "../../../redux/features/admin/userManagement.api";
 import {
-} from "../../../redux/features/admin/academicManagement.api";
+  useGetSingleAdminQuery,
+  useUpdateSingleAdminMutation,
+} from "../../../redux/features/admin/userManagement.api";
 import { toast } from "sonner";
-import { TAdmin, TResponse } from "../../../types";
+import { TResponse, TAdmin } from "../../../types";
+import { useParams } from "react-router-dom";
 
-//! This is only for development
-//! Should be removed
-const studentDefaultValues = {
-  name: {
-    firstName: "MR.",
-    middleName: "Admin",
-    lastName: "No. ",
-  },
-  gender: "male",
-  bloodGroup: "A+",
-  contactNo: "1235678",
-  emergencyContactNo: "987-654-3210",
-  presentAddress: "123 Main St, Cityville",
-  permanentAddress: "456 Oak St, Townsville",
-  admissionSemester: "65bb60ebf71fdd1add63b1c0",
-  academicDepartment: "65b4acae3dc8d4f3ad83e416",
-};
+const AdminUpdate = () => {
+  const [updateSingleAdmin] = useUpdateSingleAdminMutation();
 
-const CreateAdmin = () => {
-  const [addAdmin] = useAddAdminMutation();
+  const { adminId } = useParams<{ adminId: string }>();
+
+  const {
+    data: adminData,
+    isLoading,
+    isError,
+  } = useGetSingleAdminQuery(adminId as string);
+
+  // Handle loading and error states
+  if (isLoading) {
+    return (
+      <Flex align="center" justify="center" style={{ height: "75vh" }}>
+        <Spin tip="Loading..." />
+      </Flex>
+    );
+  }
+
+  if (isError || !adminData?.data) {
+    return (
+      <Flex align="center" justify="center" style={{ height: "75vh" }}>
+        <h2 style={{ fontWeight: "500", color: "#f0665c" }}>
+          Something went wrong!
+        </h2>
+      </Flex>
+    );
+  }
+
+  const adminDefaultValues = {
+    name: {
+      firstName: adminData?.data?.name?.firstName,
+      middleName: adminData?.data?.name?.middleName,
+      lastName: adminData?.data?.name?.lastName,
+    },
+    gender: adminData?.data?.gender,
+    /*  dateOfBirth: adminData?.data?.dateOfBirth, */
+    bloodGroup: adminData?.data?.bloodGroup,
+    email: adminData?.data?.email,
+    designation: adminData?.data?.designation,
+    image: adminData?.data?.profileImage,
+    contactNo: adminData?.data?.contactNo,
+    emergencyContactNo: adminData?.data?.emergencyContactNo,
+    presentAddress: adminData?.data?.presentAddress,
+    permanentAddress: adminData?.data?.permanentAddress,
+  };
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const toastId = toast.loading("Creating...", {
+    const toastId = toast.loading("Updating...", {
       style: { padding: "10px" },
     });
 
     const adminData = {
-      password: "admin123",
       admin: data,
     };
 
@@ -51,7 +83,10 @@ const CreateAdmin = () => {
     //console.log(Object.fromEntries(formData));
 
     try {
-      const res = (await addAdmin(formData)) as TResponse<TAdmin>;
+      const res = (await updateSingleAdmin({
+        data: adminData,
+        id: adminId,
+      })) as TResponse<TAdmin>;
 
       if (res?.error) {
         toast.error(res.error?.data?.message, {
@@ -61,7 +96,7 @@ const CreateAdmin = () => {
         });
         return;
       } else {
-        toast.success("Admin added successfully!", {
+        toast.success("Admin info updated successfully!", {
           duration: 2000,
           id: toastId,
         });
@@ -79,11 +114,11 @@ const CreateAdmin = () => {
   return (
     <div>
       <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-        Create Admin
+        Update Admin Info
       </h2>
       <Row>
         <Col span={24}>
-          <PHForm onSubmit={onSubmit} defaultValues={studentDefaultValues}>
+          <PHForm onSubmit={onSubmit} defaultValues={adminDefaultValues}>
             <Divider>Personal Info</Divider>
             <Row gutter={8}>
               <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
@@ -207,4 +242,4 @@ const CreateAdmin = () => {
   );
 };
 
-export default CreateAdmin;
+export default AdminUpdate;

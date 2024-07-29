@@ -1,4 +1,5 @@
-import { TQueryParams, TResponseRedux, TStudent } from "../../../types";
+import { useSearchParams } from "react-router-dom";
+import { TAdmin, TQueryParams, TResponseRedux, TStudent } from "../../../types";
 import { baseApi } from "../../api/baseApi";
 
 const userManagementApi = baseApi.injectEndpoints({
@@ -60,6 +61,67 @@ const userManagementApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
+    deleteStudent: builder.mutation({
+      query: (id) => ({
+        url: `/students/${id}`,
+        method: "DELETE",
+      }),
+    }),
+    addAdmin: builder.mutation({
+      query: (data) => ({
+        url: "/users/create-admin",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    getAllAdmins: builder.query({
+      query: (args) => {
+        const params = new URLSearchParams();
+
+        if (args) {
+          args.forEach((item: TQueryParams) => {
+            params.append(item.name, item.value as string);
+          });
+        }
+        return {
+          url: "/admins",
+          method: "GET",
+          params: params,
+        };
+      },
+      transformResponse: (response: TResponseRedux<TAdmin[]>) => {
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
+      },
+    }),
+    getSingleAdmin: builder.query({
+      query: (id) => {
+        return {
+          url: `/admins/${id}`,
+          method: "GET",
+        };
+      },
+      transformResponse: (response: TResponseRedux<TAdmin>) => {
+        return {
+          data: response.data,
+        };
+      },
+    }),
+    updateSingleAdmin: builder.mutation({
+      query: ({ data, id }) => ({
+        url: `/admins/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+    }),
+    deleteAdmin: builder.mutation({
+      query: (id) => ({
+        url: `/admins/${id}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -69,4 +131,10 @@ export const {
   useGetSingleStudentQuery,
   useBlockStudentMutation,
   useUpdateSingleStudentMutation,
+  useDeleteStudentMutation,
+  useAddAdminMutation,
+  useGetAllAdminsQuery,
+  useGetSingleAdminQuery,
+  useUpdateSingleAdminMutation,
+  useDeleteAdminMutation,
 } = userManagementApi;
