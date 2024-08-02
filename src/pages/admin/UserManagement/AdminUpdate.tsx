@@ -4,7 +4,7 @@ import PHSelect from "../../../components/form/PHSelect";
 import PHInput from "../../../components/form/PHInput";
 import {
   bloodGroupsOptions,
-  designationOptions,
+  adminDesignationOptions,
   genderOptions,
 } from "../../../constants/global";
 import PHDatePicker from "../../../components/form/PHDatePicker";
@@ -58,7 +58,7 @@ const AdminUpdate = () => {
     bloodGroup: adminData?.data?.bloodGroup,
     email: adminData?.data?.email,
     designation: adminData?.data?.designation,
-    image: adminData?.data?.profileImage,
+    profileImage: adminData?.data?.profileImage,
     contactNo: adminData?.data?.contactNo,
     emergencyContactNo: adminData?.data?.emergencyContactNo,
     presentAddress: adminData?.data?.presentAddress,
@@ -77,7 +77,7 @@ const AdminUpdate = () => {
     // send data as formdata to server
     const formData = new FormData();
     formData.append("data", JSON.stringify(adminData));
-    formData.append("file", data.image);
+    formData.append("file", data.profileImage);
 
     // to see fromData data
     //console.log(Object.fromEntries(formData));
@@ -168,13 +168,13 @@ const AdminUpdate = () => {
                 <PHSelect
                   label="Designation"
                   name="designation"
-                  options={designationOptions}
+                  options={adminDesignationOptions}
                   placeholder="designation"
                 />
               </Col>
               <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
                 <Controller
-                  name="image"
+                  name="profileImage"
                   render={({ field: { onChange, value, ...field } }) => (
                     <Form.Item label="Profile Image">
                       <Input

@@ -2,14 +2,19 @@ import { Button, Col, Divider, Form, Input, Row } from "antd";
 import PHForm from "../../../components/form/PHForm";
 import PHSelect from "../../../components/form/PHSelect";
 import PHInput from "../../../components/form/PHInput";
-import { bloodGroupsOptions, designationOptions, genderOptions } from "../../../constants/global";
+import {
+  bloodGroupsOptions,
+  adminDesignationOptions,
+  genderOptions,
+} from "../../../constants/global";
 import PHDatePicker from "../../../components/form/PHDatePicker";
 import { Controller, FieldValues, SubmitHandler } from "react-hook-form";
 import { useAddAdminMutation } from "../../../redux/features/admin/userManagement.api";
-import {
-} from "../../../redux/features/admin/academicManagement.api";
+import {} from "../../../redux/features/admin/academicManagement.api";
 import { toast } from "sonner";
 import { TAdmin, TResponse } from "../../../types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { userValidationSchema } from "../../../schemas/userManagement.schema";
 
 //! This is only for development
 //! Should be removed
@@ -45,7 +50,7 @@ const CreateAdmin = () => {
     // send data as formdata to server
     const formData = new FormData();
     formData.append("data", JSON.stringify(adminData));
-    formData.append("file", data.image);
+    formData.append("file", data.profileImage);
 
     // to see fromData data
     //console.log(Object.fromEntries(formData));
@@ -83,7 +88,13 @@ const CreateAdmin = () => {
       </h2>
       <Row>
         <Col span={24}>
-          <PHForm onSubmit={onSubmit} defaultValues={studentDefaultValues}>
+          <PHForm
+            onSubmit={onSubmit}
+            defaultValues={studentDefaultValues}
+            resolver={zodResolver(
+              userValidationSchema.createAdminValidationSchema
+            )}
+          >
             <Divider>Personal Info</Divider>
             <Row gutter={8}>
               <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
@@ -133,13 +144,13 @@ const CreateAdmin = () => {
                 <PHSelect
                   label="Designation"
                   name="designation"
-                  options={designationOptions}
+                  options={adminDesignationOptions}
                   placeholder="designation"
                 />
               </Col>
               <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
                 <Controller
-                  name="image"
+                  name="profileImage"
                   render={({ field: { onChange, value, ...field } }) => (
                     <Form.Item label="Profile Image">
                       <Input
@@ -158,11 +169,11 @@ const CreateAdmin = () => {
             <Divider>Contact Info</Divider>
             <Row gutter={8}>
               <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
-                <PHInput
-                  label="Email"
-                  name="email"
-                  type="text"
-                  placeholder="example@email.com"
+                <PHSelect
+                  label="Designation"
+                  name="designation"
+                  options={adminDesignationOptions}
+                  placeholder="designation"
                 />
               </Col>
               <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>

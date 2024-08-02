@@ -1,4 +1,4 @@
-import { Button, Col, Divider, Form, Input, Row } from "antd";
+import { Button, Col, Divider, Flex, Form, Input, Row, Spin } from "antd";
 import PHForm from "../../../components/form/PHForm";
 import PHSelect from "../../../components/form/PHSelect";
 import PHInput from "../../../components/form/PHInput";
@@ -7,56 +7,45 @@ import {
   genderOptions,
   facultyDesignationOptions,
 } from "../../../constants/global";
+import { Controller, FieldValues, SubmitHandler } from "react-hook-form";
+import {
+  useGetSingleFacultyQuery,
+  useUpdateSingleFacultyMutation,
+} from "../../../redux/features/admin/userManagement.api";
+import { toast } from "sonner";
+import { TResponse, TFaculty, TAcademicDepartment } from "../../../types";
 import {
   useGetAllAcademicFacultiesQuery,
   useGetAllDepartmentQuery,
 } from "../../../redux/features/admin/academicManagement.api";
-import { Controller, FieldValues, SubmitHandler } from "react-hook-form";
-import PHDatePicker from "../../../components/form/PHDatePicker";
 import { useEffect, useState } from "react";
-import { useAddFacultyMutation } from "../../../redux/features/admin/userManagement.api";
-import { TAcademicDepartment, TFaculty, TResponse } from "../../../types";
-import { toast } from "sonner";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { userValidationSchema } from "../../../schemas/userManagement.schema";
+import { useParams } from "react-router-dom";
+import PHDatePicker from "../../../components/form/PHDatePicker";
 
-const facultyDefaultValues = {
-  name: {
-    firstName: "MR.",
-    middleName: "Faculty",
-    lastName: "No. ",
-  },
-  gender: "male",
-
-  bloodGroup: "A+",
-
-  contactNo: "1235678",
-  emergencyContactNo: "987-654-3210",
-  presentAddress: "123 Main St, Cityville",
-  permanentAddress: "456 Oak St, Townsville",
-};
-
-const CreateFaculty = () => {
-  const [addFaculty] = useAddFacultyMutation();
+const FacultyUpdate = () => {
+  const { facultyId } = useParams<{ facultyId: string }>();
+  const [updateSingleFaculty] = useUpdateSingleFacultyMutation();
 
   const [selectedFaculty, setSelectedFaculty] = useState<string | null>(null);
-
   const [filteredDepartments, setFilteredDepartments] = useState<
     TAcademicDepartment[]
   >([]);
 
-  /* get all academic faculy and department data to create select options */
-  const { data: academicfacultyData, isLoading: fIsLoading } =
+  const { data: academicfacultiesData, isLoading: fIsLoading } =
     useGetAllAcademicFacultiesQuery(undefined);
+
+  //console.log(academicfacultiesData);
+
   const { data: departmentData, isLoading: dIsLoading } =
     useGetAllDepartmentQuery(undefined);
 
-  const facultiesOptions = academicfacultyData?.data?.map((item) => ({
+  //console.log(departmentData);
+
+  const facultiesOptions = academicfacultiesData?.data?.map((item) => ({
     value: item._id,
     label: `${item.name}`,
   }));
 
-  /* choose department according to the selected faculty */
   useEffect(() => {
     if (selectedFaculty && departmentData) {
       const filtered = departmentData?.data?.filter(
@@ -64,10 +53,11 @@ const CreateFaculty = () => {
           department.academicFaculty._id === selectedFaculty
       );
       setFilteredDepartments(filtered);
+    } else {
+      setFilteredDepartments([]);
     }
   }, [selectedFaculty, departmentData]);
 
-  /* to handle selected faculty */
   const handleFacultyChange = (value: string) => {
     setSelectedFaculty(value);
   };
@@ -77,13 +67,57 @@ const CreateFaculty = () => {
     label: `${item.name}`,
   }));
 
+  const {
+    data: facultyData,
+    isLoading,
+    isError,
+  } = useGetSingleFacultyQuery(facultyId as string);
+
+  if (isLoading) {
+    return (
+      <Flex align="center" justify="center" style={{ height: "75vh" }}>
+        <Spin tip="Loading..." />
+      </Flex>
+    );
+  }
+
+  if (isError || !facultyData?.data) {
+    return (
+      <Flex align="center" justify="center" style={{ height: "75vh" }}>
+        <h2 style={{ fontWeight: "500", color: "#f0665c" }}>
+          Something went wrong!
+        </h2>
+      </Flex>
+    );
+  }
+
+  /* default values */
+  const facultyDefaultValues = {
+    name: {
+      firstName: facultyData?.data?.name?.firstName,
+      middleName: facultyData?.data?.name?.middleName,
+      lastName: facultyData?.data?.name?.lastName,
+    },
+    gender: facultyData?.data?.gender,
+    dateOfBirth: facultyData?.data?.dateOfBirth,
+    bloodGroup: facultyData?.data?.bloodGroup,
+    email: facultyData?.data?.email,
+    designation: facultyData?.data?.designation,
+    profileImage: facultyData?.data?.profileImage,
+    contactNo: facultyData?.data?.contactNo,
+    emergencyContactNo: facultyData?.data?.emergencyContactNo,
+    presentAddress: facultyData?.data?.presentAddress,
+    permanentAddress: facultyData?.data?.permanentAddress,
+    /* academicFaculty: facultyData?.data?.academicFaculty?.name,
+    academicDepartment: facultyData?.data?.academicDepartment?.name, */
+  };
+
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const toastId = toast.loading("Creating...", {
+    const toastId = toast.loading("Updating...", {
       style: { padding: "10px" },
     });
 
     const facultyData = {
-      password: "faculty123",
       faculty: data,
     };
 
@@ -96,7 +130,10 @@ const CreateFaculty = () => {
     console.log(facultyData);
 
     try {
-      const res = (await addFaculty(formData)) as TResponse<TFaculty>;
+      const res = (await updateSingleFaculty({
+        data: facultyData,
+        id: facultyId,
+      })) as TResponse<TFaculty>;
 
       if (res?.error) {
         toast.error(res.error?.data?.message, {
@@ -106,7 +143,7 @@ const CreateFaculty = () => {
         });
         return;
       } else {
-        toast.success("Faculty added successfully!", {
+        toast.success("Faculty data updated successfully!", {
           duration: 2000,
           id: toastId,
         });
@@ -124,17 +161,11 @@ const CreateFaculty = () => {
   return (
     <div>
       <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-        Create Faculty
+        Update Faculty Info
       </h2>
       <Row>
         <Col span={24}>
-          <PHForm
-            onSubmit={onSubmit}
-            defaultValues={facultyDefaultValues}
-            resolver={zodResolver(
-              userValidationSchema.createFacultyValidationSchema
-            )}
-          >
+          <PHForm onSubmit={onSubmit} defaultValues={facultyDefaultValues}>
             <Divider>Personal Info</Divider>
             <Row gutter={8}>
               <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
@@ -282,4 +313,4 @@ const CreateFaculty = () => {
   );
 };
 
-export default CreateFaculty;
+export default FacultyUpdate;

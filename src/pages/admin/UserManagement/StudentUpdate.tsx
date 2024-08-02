@@ -19,6 +19,7 @@ import PHDatePicker from "../../../components/form/PHDatePicker";
 
 const StudentUpdate = () => {
   const [updateSingleStudent] = useUpdateSingleStudentMutation();
+
   const { studentId } = useParams<{ studentId: string }>();
   const { data: dData, isLoading: dIsLoading } =
     useGetAllDepartmentQuery(undefined);
@@ -71,7 +72,7 @@ const StudentUpdate = () => {
     /*  dateOfBirth: studentData?.data?.dateOfBirth, */
     bloodGroup: studentData?.data?.bloodGroup,
     email: studentData?.data?.email,
-    image: studentData?.data?.profileImage,
+    profileImage: studentData?.data?.profileImage,
     contactNo: studentData?.data?.contactNo,
     emergencyContactNo: studentData?.data?.emergencyContactNo,
     presentAddress: studentData?.data?.presentAddress,
@@ -108,7 +109,7 @@ const StudentUpdate = () => {
 
     const formData = new FormData();
     formData.append("data", JSON.stringify(studentData));
-    formData.append("file", data.image);
+    formData.append("file", data.profileImage);
 
     // to see fromData data
     //console.log(Object.fromEntries(formData));
@@ -197,12 +198,13 @@ const StudentUpdate = () => {
               </Col>
               <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
                 <Controller
-                  name="image"
+                  name="profileImage"
                   render={({ field: { onChange, value, ...field } }) => (
                     <Form.Item label="Profile Image">
                       <Input
                         type="file"
-                        value={value?.fileName} size="large"
+                        value={value?.fileName}
+                        size="large"
                         {...field}
                         onChange={(e) => onChange(e.target.files?.[0])}
                       />

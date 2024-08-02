@@ -7,7 +7,7 @@ import { FieldValues, SubmitHandler } from "react-hook-form";
 import PHSelect from "../../../components/form/PHSelect";
 import {
   useAddAcademicDepartmentMutation,
-  useGetAllFacultiesQuery,
+  useGetAllAcademicFacultiesQuery,
 } from "../../../redux/features/admin/academicManagement.api";
 import { toast } from "sonner";
 import { TResponse } from "../../../types";
@@ -15,10 +15,11 @@ import { TAcademicDepartment } from "../../../types/academicManagement.type";
 
 const CreateAcademicDepartment = () => {
   const [addAcademicDepartment] = useAddAcademicDepartmentMutation();
-  const { data: facultyData } = useGetAllFacultiesQuery(undefined);
-  console.log(facultyData);
+  
+  const { data: academicfacultyData } = useGetAllAcademicFacultiesQuery(undefined);
+  console.log(academicfacultyData);
 
-  const facultyOptions = facultyData?.data?.map((item) => ({
+  const facultyOptions = academicfacultyData?.data?.map((item) => ({
     value: item._id,
     label: item.name,
   }));

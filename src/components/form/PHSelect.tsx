@@ -5,11 +5,19 @@ type TPHSelectProps = {
   label: string;
   name: string;
   options: { value: string; label: string; disabled?: boolean }[] | undefined;
-  disabled?:boolean;
+  disabled?: boolean;
   placeholder?: string;
+  onChange?: (value: string) => void;
 };
 
-const PHSelect = ({ label, name, options, placeholder,disabled }: TPHSelectProps) => {
+const PHSelect = ({
+  label,
+  name,
+  options,
+  placeholder,
+  disabled,
+  onChange,
+}: TPHSelectProps) => {
   return (
     <Controller
       name={name}
@@ -22,6 +30,10 @@ const PHSelect = ({ label, name, options, placeholder,disabled }: TPHSelectProps
             options={options}
             placeholder={placeholder}
             disabled={disabled}
+            onChange={(value) => {
+              field.onChange(value); // Update form value
+              if (onChange) onChange(value); // Call custom onChange handler if provided
+            }}
           />
           {error && <small style={{ color: "red" }}>{error.message}</small>}
         </Form.Item>

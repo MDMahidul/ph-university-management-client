@@ -1,5 +1,6 @@
 import { DatePicker, Form } from "antd";
-import { Controller } from "react-hook-form";
+import moment from "moment";
+import { Controller, useFormContext } from "react-hook-form";
 
 type TDatePickerProps = {
   type?: string;
@@ -9,6 +10,8 @@ type TDatePickerProps = {
 };
 
 const PHDatePicker = ({ name, label }: TDatePickerProps) => {
+  const { setValue } = useFormContext();
+
   return (
     <div style={{ marginBottom: "20px" }}>
       <Controller
@@ -20,6 +23,11 @@ const PHDatePicker = ({ name, label }: TDatePickerProps) => {
               size="large"
               id={name}
               style={{ width: "100%" }}
+              onChange={(date) => {
+                field.onChange(date);
+                setValue(name, date ? date.format("YYYY-MM-DD") : "");
+              }}
+              value={field.value ? moment(field.value) : null}
             />
             {error && <small style={{ color: "red" }}>{error.message}</small>}
           </Form.Item>
