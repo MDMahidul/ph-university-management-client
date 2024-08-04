@@ -53,11 +53,15 @@ const FacultyData = () => {
       } else {
         toast.success("Faculty deleted successfully!", {
           duration: 2000,
+        style: { padding: "10px" }
         });
       }
     } catch (error: any) {
       console.log(error);
-      toast.error(error?.message, { duration: 2000 });
+      toast.error(error?.message, {
+        duration: 2000,
+        style: { padding: "10px" },
+      });
     }
   };
 

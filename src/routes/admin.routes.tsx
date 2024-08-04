@@ -4,6 +4,9 @@ import AcademicSemester from "../pages/admin/AcademicManagement/AcademicSemester
 import CreateAcademicDepartment from "../pages/admin/AcademicManagement/CreateAcademicDepartment";
 import CreateAcademicFaculty from "../pages/admin/AcademicManagement/CreateAcademicFaculty";
 import CreateAcademicSemester from "../pages/admin/AcademicManagement/CreateAcademicSemester";
+import UpdateAcademicDepartment from "../pages/admin/AcademicManagement/UpdateAcademicDepartment";
+import UpdateAcademicFaculty from "../pages/admin/AcademicManagement/UpdateAcademicFaculty";
+import UpdateAcademicSemester from "../pages/admin/AcademicManagement/UpdateAcademicSemester";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminData from "../pages/admin/UserManagement/AdminData";
 import AdminDetails from "../pages/admin/UserManagement/AdminDetails";
@@ -38,6 +41,10 @@ export const adminPaths = [
         element: <AcademicSemester />,
       },
       {
+        path: "update-academic-semester/:semesterId",
+        element: <UpdateAcademicSemester />,
+      },
+      {
         name: "Create A.Faculty",
         path: "create-academic-faculty",
         element: <CreateAcademicFaculty />,
@@ -48,6 +55,10 @@ export const adminPaths = [
         element: <AcademicFaculty />,
       },
       {
+        path: "update-academic-faculty/:academicFacultyId",
+        element: <UpdateAcademicFaculty />,
+      },
+      {
         name: "Create A.Department",
         path: "create-academic-department",
         element: <CreateAcademicDepartment />,
@@ -56,6 +67,10 @@ export const adminPaths = [
         name: "Academic Department",
         path: "academic-department",
         element: <AcademicDepartment />,
+      },
+      {
+        path: "update-academic-department/:departmentId",
+        element: <UpdateAcademicDepartment />,
       },
     ],
   },

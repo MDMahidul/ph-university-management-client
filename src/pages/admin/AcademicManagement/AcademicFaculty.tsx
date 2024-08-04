@@ -1,6 +1,7 @@
 import { Button, Table, TableColumnsType } from "antd";
 import { TAcademicFaculty } from "../../../types/academicManagement.type";
 import { useGetAllAcademicFacultiesQuery } from "../../../redux/features/admin/academicManagement.api";
+import { Link } from "react-router-dom";
 
 type TFacultyTableData = Pick<TAcademicFaculty, "name">;
 
@@ -27,10 +28,12 @@ const AcademicFaculty = () => {
     {
       title: "Action",
       key: "x",
-      render: () => {
+      render: (item) => {
         return (
           <div>
-            <Button>Update</Button>
+            <Link to={`/admin/update-academic-faculty/${item?.key}`}>
+              <Button>Update</Button>
+            </Link>
           </div>
         );
       },

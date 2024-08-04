@@ -1,6 +1,7 @@
 import { Button, Table, TableColumnsType } from "antd";
 import { useGetAllDepartmentQuery } from "../../../redux/features/admin/academicManagement.api";
 import { TAcademicDepartment } from "../../../types/academicManagement.type";
+import { Link } from "react-router-dom";
 
 type TTableData = Pick<TAcademicDepartment, "name">;
 
@@ -31,10 +32,12 @@ const AcademicDepartment = () => {
     {
       title: "Action",
       key: "x",
-      render: () => {
+      render: (item) => {
         return (
           <div>
-            <Button>Update</Button>
+            <Link to={`/admin/update-academic-department/${item.key}`}>
+              <Button>Update</Button>
+            </Link>
           </div>
         );
       },

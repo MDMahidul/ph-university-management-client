@@ -3,6 +3,7 @@ import { useGetAllSemesterQuery } from "../../../redux/features/admin/academicMa
 import { TAcademicSemester } from "../../../types/academicManagement.type";
 import { TQueryParams } from "../../../types";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 // pick specific filed from the TAcademicSemester type for the TTableData type
 type TTableData = Pick<
@@ -51,10 +52,12 @@ const AcademicSemester = () => {
     {
       title: "Action",
       key: "x",
-      render: () => {
+      render: (item) => {
         return (
           <div>
-            <Button>Update</Button>
+            <Link to={`/admin/update-academic-semester/${item.key}`}>
+              <Button>Update</Button>
+            </Link>
           </div>
         );
       },
