@@ -15,11 +15,11 @@ import {
 } from "../../../redux/features/admin/userManagement.api";
 import { toast } from "sonner";
 import { TResponse, TAdmin } from "../../../types";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const AdminUpdate = () => {
   const [updateSingleAdmin] = useUpdateSingleAdminMutation();
-
+  const navigate = useNavigate();
   const { adminId } = useParams<{ adminId: string }>();
 
   const {
@@ -100,6 +100,7 @@ const AdminUpdate = () => {
           duration: 2000,
           id: toastId,
         });
+        navigate("/admin/admin-data");
       }
     } catch (error: any) {
       console.log(error);

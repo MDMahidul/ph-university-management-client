@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { TAdmin, TResponse } from "../../../types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userValidationSchema } from "../../../schemas/userManagement.schema";
+import { useNavigate } from "react-router-dom";
 
 //! This is only for development
 //! Should be removed
@@ -36,7 +37,7 @@ const studentDefaultValues = {
 
 const CreateAdmin = () => {
   const [addAdmin] = useAddAdminMutation();
-
+  const navigate = useNavigate();
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const toastId = toast.loading("Creating...", {
       style: { padding: "10px" },
@@ -70,6 +71,7 @@ const CreateAdmin = () => {
           duration: 2000,
           id: toastId,
         });
+        navigate("/admin/admin-data");
       }
     } catch (error: any) {
       console.log(error);

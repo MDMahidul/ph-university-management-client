@@ -69,12 +69,12 @@ const UpdateAcademicFaculty = () => {
         });
         return;
       } else {
-        navigate("/admin/academic-faculty");
         toast.success("Academic faculty updated successfully!", {
           duration: 2000,
           id: toastId,
           style: { padding: "10px" },
         });
+        navigate("/admin/academic-faculty");
       }
     } catch (error: any) {
       console.log(error);

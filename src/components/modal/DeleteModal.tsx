@@ -39,7 +39,7 @@ const DeleteModal = ({
   };
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
+    //console.log("Clicked cancel button");
     setOpen(false);
   };
 

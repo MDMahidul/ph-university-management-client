@@ -8,17 +8,16 @@ import {
   facultyDesignationOptions,
 } from "../../../constants/global";
 import {
-  useGetAllAcademicFacultiesQuery,
   useGetAllDepartmentQuery,
 } from "../../../redux/features/admin/academicManagement.api";
 import { Controller, FieldValues, SubmitHandler } from "react-hook-form";
 import PHDatePicker from "../../../components/form/PHDatePicker";
-import { useEffect, useState } from "react";
 import { useAddFacultyMutation } from "../../../redux/features/admin/userManagement.api";
-import { TAcademicDepartment, TFaculty, TResponse } from "../../../types";
+import {TFaculty, TResponse } from "../../../types";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userValidationSchema } from "../../../schemas/userManagement.schema";
+import { useNavigate } from "react-router-dom";
 
 const facultyDefaultValues = {
   name: {
@@ -38,41 +37,13 @@ const facultyDefaultValues = {
 
 const CreateFaculty = () => {
   const [addFaculty] = useAddFacultyMutation();
+  const navigate = useNavigate();
 
-  const [selectedFaculty, setSelectedFaculty] = useState<string | null>(null);
-
-  const [filteredDepartments, setFilteredDepartments] = useState<
-    TAcademicDepartment[]
-  >([]);
-
-  /* get all academic faculy and department data to create select options */
-  const { data: academicfacultyData, isLoading: fIsLoading } =
-    useGetAllAcademicFacultiesQuery(undefined);
   const { data: departmentData, isLoading: dIsLoading } =
     useGetAllDepartmentQuery(undefined);
+console.log(departmentData?.data);
 
-  const facultiesOptions = academicfacultyData?.data?.map((item) => ({
-    value: item._id,
-    label: `${item.name}`,
-  }));
-
-  /* choose department according to the selected faculty */
-  useEffect(() => {
-    if (selectedFaculty && departmentData) {
-      const filtered = departmentData?.data?.filter(
-        (department: TAcademicDepartment) =>
-          department.academicFaculty._id === selectedFaculty
-      );
-      setFilteredDepartments(filtered);
-    }
-  }, [selectedFaculty, departmentData]);
-
-  /* to handle selected faculty */
-  const handleFacultyChange = (value: string) => {
-    setSelectedFaculty(value);
-  };
-
-  const departmentsOptions = filteredDepartments.map((item) => ({
+  const departmentsOptions = departmentData?.data?.map((item) => ({
     value: item._id,
     label: `${item.name}`,
   }));
@@ -110,6 +81,7 @@ const CreateFaculty = () => {
           duration: 2000,
           id: toastId,
         });
+        navigate("/admin/faculty-data");
       }
     } catch (error: any) {
       console.log(error);
@@ -211,17 +183,7 @@ const CreateFaculty = () => {
               </Col>
               <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
                 <PHSelect
-                  disabled={fIsLoading}
-                  label="Academic Faculty"
-                  name="academicFaculty"
-                  options={facultiesOptions}
-                  placeholder="academicFaculty"
-                  onChange={handleFacultyChange}
-                />
-              </Col>
-              <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
-                <PHSelect
-                  disabled={dIsLoading || !selectedFaculty}
+                  disabled={dIsLoading}
                   label="Academic Department"
                   name="academicDepartment"
                   options={departmentsOptions}

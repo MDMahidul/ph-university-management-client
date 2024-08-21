@@ -19,12 +19,13 @@ import {
   useGetAllDepartmentQuery,
 } from "../../../redux/features/admin/academicManagement.api";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PHDatePicker from "../../../components/form/PHDatePicker";
 
 const FacultyUpdate = () => {
   const { facultyId } = useParams<{ facultyId: string }>();
   const [updateSingleFaculty] = useUpdateSingleFacultyMutation();
+  const navigate = useNavigate();
 
   const [selectedFaculty, setSelectedFaculty] = useState<string | null>(null);
   const [filteredDepartments, setFilteredDepartments] = useState<
@@ -33,7 +34,6 @@ const FacultyUpdate = () => {
 
   const { data: academicfacultiesData, isLoading: fIsLoading } =
     useGetAllAcademicFacultiesQuery(undefined);
-
   //console.log(academicfacultiesData);
 
   const { data: departmentData, isLoading: dIsLoading } =
@@ -147,6 +147,7 @@ const FacultyUpdate = () => {
           duration: 2000,
           id: toastId,
         });
+        navigate("/admin/faculty-data");
       }
     } catch (error: any) {
       console.log(error);

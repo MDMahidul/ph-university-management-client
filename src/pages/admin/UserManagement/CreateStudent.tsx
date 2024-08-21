@@ -12,6 +12,7 @@ import {
 } from "../../../redux/features/admin/academicManagement.api";
 import { toast } from "sonner";
 import { TResponse, TStudent } from "../../../types";
+import { useNavigate } from "react-router-dom";
 
 //! This is only for development
 //! Should be removed
@@ -46,12 +47,11 @@ const studentDefaultValues = {
     address: "789 Pine St, Villageton",
   },
 
-  admissionSemester: "65bb60ebf71fdd1add63b1c0",
-  academicDepartment: "65b4acae3dc8d4f3ad83e416",
 };
 
 const CreateStudent = () => {
   const [addStudent] = useAddStudentMutation();
+  const navigate = useNavigate();
 
   const { data: dData, isLoading: dIsLoading } =
     useGetAllDepartmentQuery(undefined);
@@ -103,6 +103,7 @@ const CreateStudent = () => {
           id: toastId,
           style: { padding: "10px" },
         });
+        navigate("/admin/student-data");
       }
     } catch (error: any) {
       console.log(error);

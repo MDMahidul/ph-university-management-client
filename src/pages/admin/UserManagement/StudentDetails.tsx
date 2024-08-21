@@ -11,7 +11,7 @@ const StudentDetails = () => {
     isLoading,
   } = useGetSingleStudentQuery(studentId);
 
-  console.log("Student data");
+  //console.log("Student data");
 
   // Handle loading and error states
   if (isLoading) {
@@ -115,7 +115,7 @@ const StudentDetails = () => {
             <Image
               className="responsive-image"
               preview={false}
-              src={profileImage}
+              src={profileImage ? profileImage : '/public/images/student.jpg'}
             />
           </Col>
           <Col

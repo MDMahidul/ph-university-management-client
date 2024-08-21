@@ -54,12 +54,51 @@ const Login = () => {
   };
   
   return (
-    <Row justify="center" align="middle" style={{ height: "100vh" }}>
-      <PHForm onSubmit={onSubmit} defaultValues={defaultValues}>
-        <PHInput type="text" name="userId" label="ID: " placeholder="user id" />
-        <PHInput type="text" name="password" label="Password: " placeholder="******"/>
-        <Button htmlType="submit">Login</Button>
-      </PHForm>
+    <Row
+      justify="center"
+      align="middle"
+      style={{
+        height: "100vh",
+        backgroundImage: "url('/images/uni.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        position: "relative",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "rgba(0, 0, 0, 0.7)",
+          zIndex: 1,
+        }}
+      ></div>
+      <div
+        style={{
+          backgroundColor: "#F5F7F8",
+          padding: "50px 100px",
+          zIndex: "2",
+        }}
+      >
+        <PHForm onSubmit={onSubmit} defaultValues={defaultValues}>
+          <PHInput
+            type="text"
+            name="userId"
+            label="ID: "
+            placeholder="user id"
+          />
+          <PHInput
+            type="text"
+            name="password"
+            label="Password: "
+            placeholder="******"
+          />
+          <Button htmlType="submit">Login</Button>
+        </PHForm>
+      </div>
     </Row>
   );
 };

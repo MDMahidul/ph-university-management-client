@@ -82,12 +82,12 @@ const UpdateAcademicDepartment = () => {
         });
         return;
       } else {
-        navigate("/admin/academic-department");
         toast.success("Department updated successfully!", {
           duration: 2000,
           id: toastId,
           style: { padding: "10px" },
         });
+        navigate("/admin/academic-department");
       }
     } catch (error: any) {
       console.log(error);

@@ -106,7 +106,7 @@ const AdminDetails = () => {
             <Image
               className="responsive-image"
               preview={false}
-              src={profileImage}
+              src={profileImage ? profileImage : '/public/images/user.webp'}
             />
           </Col>
           <Col

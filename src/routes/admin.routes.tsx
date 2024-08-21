@@ -8,6 +8,13 @@ import UpdateAcademicDepartment from "../pages/admin/AcademicManagement/UpdateAc
 import UpdateAcademicFaculty from "../pages/admin/AcademicManagement/UpdateAcademicFaculty";
 import UpdateAcademicSemester from "../pages/admin/AcademicManagement/UpdateAcademicSemester";
 import AdminDashboard from "../pages/admin/AdminDashboard";
+import Courses from "../pages/admin/CourseManagement/Courses";
+import CreateCourse from "../pages/admin/CourseManagement/CreateCourse";
+import OfferCourse from "../pages/admin/CourseManagement/OfferCourse";
+import OfferedCourses from "../pages/admin/CourseManagement/OfferedCourses";
+import RegisteredSemesters from "../pages/admin/CourseManagement/RegisteredSemesters";
+import SemesterRegistration from "../pages/admin/CourseManagement/SemesterRegistration";
+import UpdateOfferedCourse from "../pages/admin/CourseManagement/UpdateOfferedCourse";
 import AdminData from "../pages/admin/UserManagement/AdminData";
 import AdminDetails from "../pages/admin/UserManagement/AdminDetails";
 import AdminUpdate from "../pages/admin/UserManagement/AdminUpdate";
@@ -130,6 +137,45 @@ export const adminPaths = [
       {
         path: "update-faculty-data/:facultyId",
         element: <FacultyUpdate />,
+      },
+    ],
+  },
+  {
+    name: "Course Management",
+    children: [
+      {
+        name: "Semester Registration",
+        path: "semester-registration",
+        element: <SemesterRegistration />,
+      },
+      {
+        name: "Registered Semesters",
+        path: "registered-semesters",
+        element: <RegisteredSemesters />,
+      },
+      {
+        name: "Create Course",
+        path: "create-course",
+        element: <CreateCourse />,
+      },
+      {
+        name: "Courses",
+        path: "courses",
+        element: <Courses />,
+      },
+      {
+        name: "Offer Course",
+        path: "offer-course",
+        element: <OfferCourse />,
+      },
+      {
+        name: "Offered Courses",
+        path: "offered-courses",
+        element: <OfferedCourses />,
+      },
+      {
+        path: "update-offered-courses/:id",
+        element: <UpdateOfferedCourse />,
       },
     ],
   },

@@ -9,6 +9,7 @@ import { useAddAcademicSemesterMutation } from "../../../redux/features/admin/ac
 import { toast } from "sonner";
 import { TResponse } from "../../../types";
 import { TAcademicSemester } from "../../../types/academicManagement.type";
+import { useNavigate } from "react-router-dom";
 
 const nameOptions = [
   {
@@ -37,7 +38,7 @@ const yearOptions = [0, 1, 2, 3].map((number) => ({
 const CreateAcademicSemester = () => {
   // call the base api
   const [addAcademicSemester] = useAddAcademicSemesterMutation();
-
+  const navigate = useNavigate();
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const toastId = toast.loading("Creating...", {
       style: { padding: "10px" },
@@ -71,6 +72,7 @@ const CreateAcademicSemester = () => {
           duration: 2000,
           id: toastId,
         });
+        navigate("/admin/academic-semesters");
       }
     } catch (error: any) {
       console.log(error);

@@ -13,6 +13,8 @@ export const monthNames = [
   "December",
 ];
 
+const weekdays = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"];
+
 export const genders = ["male", "female", "others"];
 
 export const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
@@ -49,6 +51,11 @@ export const adminDesignationOptions = adminDesignation.map((item) => ({
 }));
 
 export const facultyDesignationOptions = facultyDesignation.map((item) => ({
+  value: item,
+  label: item,
+}));
+
+export const weekDaysOptions = weekdays.map((item) => ({
   value: item,
   label: item,
 }));

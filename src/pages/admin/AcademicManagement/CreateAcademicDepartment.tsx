@@ -12,10 +12,11 @@ import {
 import { toast } from "sonner";
 import { TResponse } from "../../../types";
 import { TAcademicDepartment } from "../../../types/academicManagement.type";
+import { useNavigate } from "react-router-dom";
 
 const CreateAcademicDepartment = () => {
   const [addAcademicDepartment] = useAddAcademicDepartmentMutation();
-  
+  const navigate = useNavigate();
   const { data: academicfacultyData } = useGetAllAcademicFacultiesQuery(undefined);
   console.log(academicfacultyData);
 
@@ -51,6 +52,7 @@ const CreateAcademicDepartment = () => {
           duration: 2000,
           id: toastId,
         });
+        navigate("/admin/academic-department");
       }
     } catch (error: any) {
       console.log(error);

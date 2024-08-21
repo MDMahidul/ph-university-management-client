@@ -8,7 +8,7 @@ import {
   useGetAllDepartmentQuery,
   useGetAllSemesterQuery,
 } from "../../../redux/features/admin/academicManagement.api";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useGetSingleStudentQuery,
   useUpdateSingleStudentMutation,
@@ -19,6 +19,7 @@ import PHDatePicker from "../../../components/form/PHDatePicker";
 
 const StudentUpdate = () => {
   const [updateSingleStudent] = useUpdateSingleStudentMutation();
+  const navigate = useNavigate();
 
   const { studentId } = useParams<{ studentId: string }>();
   const { data: dData, isLoading: dIsLoading } =
@@ -133,6 +134,7 @@ const StudentUpdate = () => {
           id: toastId,
         style: { padding: "10px" }
         });
+        navigate("/admin/student-data");
       }
     } catch (error: any) {
       console.log(error);

@@ -90,7 +90,7 @@ const StudentsData = () => {
     { name: "sort", value: "id" },
     ...params,
   ]);
-
+console.log(studentsData);
   const metaData = studentsData?.meta;
 
   const tableData = studentsData?.data?.map(

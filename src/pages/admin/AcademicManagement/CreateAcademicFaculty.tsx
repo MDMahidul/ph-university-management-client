@@ -8,10 +8,11 @@ import { useAddAcademicFacultyMutation } from "../../../redux/features/admin/aca
 import { toast } from "sonner";
 import { TResponse } from "../../../types";
 import { TAcademicFaculty } from "../../../types/academicManagement.type";
+import { useNavigate } from "react-router-dom";
 
 const CreateAcademicFaculty = () => {
   const [addAcademicFaculty] = useAddAcademicFacultyMutation();
-
+  const navigate = useNavigate();
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const toastId = toast.loading("Creating...", {
       style: { padding: "10px" },
@@ -29,7 +30,8 @@ const CreateAcademicFaculty = () => {
       if (res?.error) {
         toast.error(res.error?.data?.message, {
           duration: 2000,
-          id: toastId,style:{padding:'10px'}
+          id: toastId,
+          style: { padding: "10px" },
         });
         return;
       } else {
@@ -37,6 +39,7 @@ const CreateAcademicFaculty = () => {
           duration: 2000,
           id: toastId,
         });
+        navigate("/admin/academic-faculty");
       }
     } catch (error: any) {
       console.log(error);

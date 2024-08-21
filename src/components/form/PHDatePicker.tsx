@@ -10,8 +10,6 @@ type TDatePickerProps = {
 };
 
 const PHDatePicker = ({ name, label }: TDatePickerProps) => {
-  const { setValue } = useFormContext();
-
   return (
     <div style={{ marginBottom: "20px" }}>
       <Controller
@@ -23,10 +21,7 @@ const PHDatePicker = ({ name, label }: TDatePickerProps) => {
               size="large"
               id={name}
               style={{ width: "100%" }}
-              onChange={(date) => {
-                field.onChange(date);
-                setValue(name, date ? date.format("YYYY-MM-DD") : "");
-              }}
+              onChange={(date) => field.onChange(date ? date.toDate() : null)}
               value={field.value ? moment(field.value) : null}
             />
             {error && <small style={{ color: "red" }}>{error.message}</small>}

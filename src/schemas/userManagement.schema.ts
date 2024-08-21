@@ -59,7 +59,7 @@ const createStudentValidationSchema = z.object({
     .refine((val) => genders.includes(val), {
       message: "Gender can only be 'male', 'female', or 'others'",
     }),
-  dateOfBirth: z.string().optional(),
+  dateOfBirth: z.date().optional(),
   email: z.string().nonempty("Email is required").email("Invalid email format"),
   contactNo: z.string().nonempty("Contact is required"),
   emergencyContactNo: z.string().nonempty("Emergency contact is required"),
