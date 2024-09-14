@@ -39,6 +39,12 @@ const baseQueryWithRefreshToken: BaseQueryFn<
       style: { padding: "10px" },
     });
   }
+  if (result?.error?.status === 403) {
+    toast.error(result?.error?.data.message, {
+      duration: 2000,
+      style: { padding: "10px" },
+    });
+  }
   if (result?.error?.status === 500) {
     toast.error(result?.error?.data.message, {
       duration: 2000,

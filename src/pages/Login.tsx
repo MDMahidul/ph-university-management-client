@@ -10,10 +10,10 @@ import PHForm from "../components/form/PHForm";
 import PHInput from "../components/form/PHInput";
 
 const Login = () => {
-   const defaultValues= {
-      userId: "A-0001",
-      password: "admin123",
-    }
+   const defaultValues = {
+     userId: "2024030007",
+     password: "student123",
+   };
 
   const navigate = useNavigate();
   const [login] = useLoginMutation();
@@ -44,7 +44,11 @@ const Login = () => {
         style: { padding: "10px" },
       });
       
-      navigate(`/${user.role}/dashboard`);
+      if (res.data.needsPasswordChange) {
+        navigate(`/change-password`);
+      } else {
+        navigate(`/${user.role}/dashboard`);
+      }
 
     } catch (error) {
 
