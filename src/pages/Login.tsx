@@ -11,8 +11,8 @@ import PHInput from "../components/form/PHInput";
 
 const Login = () => {
    const defaultValues = {
-     userId: "2024030007",
-     password: "student123",
+     userId: "",
+     password: "",
    };
 
   const navigate = useNavigate();

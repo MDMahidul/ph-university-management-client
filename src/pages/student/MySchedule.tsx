@@ -12,13 +12,14 @@ const MySchedule = () => {
   if (isError) {
     return <p>Something went wrong!</p>;
   }
-/*   console.log(courseData?.data);
-  console.log(courseData?.data.map((item:any)=>item.course.days)); */
+  console.log(courseData?.data);
+/*  console.log(courseData?.data.map((item:any)=>item.course.days)); */
    const tableData = courseData?.data?.map((item:any) => ({
      key: item.course._id,
      title:item.course.title,
      day:item.offeredCourse.days.map((day:string)=>(<span>{day} </span>) ),
      section:item.offeredCourse.section,
+     grade: item.grade ? item.grade : 'n/a',
    }));
 
      const columns: TableColumnsType<TTableData> = [
@@ -37,6 +38,13 @@ const MySchedule = () => {
          title: "Section",
          key: "section",
          dataIndex: "section",
+       
+       },
+       {
+         
+         title: "Grade",
+         key: "grade",
+         dataIndex: "grade",
        
        },
      ];
